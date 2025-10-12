@@ -34,12 +34,12 @@
         }
 
         // method to fill matrix with random values
-        public void Fill()
+        public void Fill(double min, double max)
         {
             Random rand = new Random();
             for (int i = 0; i < rows; i++)
                 for (int j = 0; j < columns; j++)
-                    matrix[i, j] = rand.NextDouble();
+                    matrix[i, j] = rand.NextDouble() * (max - min) + min;
         }
 
         public void ChangeSize()
@@ -51,6 +51,21 @@
             Console.WriteLine("Enter new value for columns: ");
             int newColumns = Convert.ToInt32(Console.ReadLine());
 
+            // validate input
+            if (newRows <= 0 || newColumns <= 0) 
+            {
+                throw new ArgumentException("Matrix dimensions must be positive integers.");
+            }
+
+            // copy
+            int corRows = Math.Min(rows, newRows);
+            int corColumns = Math.Min(columns, newColumns);
+
+            for (int i = 0; i < corRows; i++)
+                for (int j = 0; j < corColumns; j++)
+                    matrix[i, j] = matrix[i, j];
+
+            // fill is new size is bigger
 
         }
     }
