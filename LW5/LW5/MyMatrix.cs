@@ -5,9 +5,22 @@
         // init fields
         private int rows, columns;
         private double[,] matrix;
+        private Random random;
+
+        // helping method
+        public void FillFields(double minV, double maxV)
+        {
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < columns; j++)
+                {
+                    matrix[i, j] = random.NextDouble() * (maxV - minV) + minV;
+                }
+            }
+        }
 
         // constructor
-        public MyMatrix(int m, int n)
+        public MyMatrix(int m, int n, double minV = 0, double maxV = 100)
         {
             // validate input
             if (m <= 0 || n <= 0)
@@ -19,6 +32,7 @@
             rows = m;
             columns = n;
             matrix = new double[rows, columns];
+            random = new Random();
 
             Console.WriteLine("Enter minimal value: ");
             double minValue = Convert.ToDouble(Console.ReadLine());
@@ -27,10 +41,7 @@
             double maxValue = Convert.ToDouble(Console.ReadLine());
 
             // fill matrix with random values
-            Random rand = new Random();
-            for (int i = 0; i < rows; i++)
-                for (int j = 0; j < columns; j++)
-                    matrix[i, j] = rand.NextDouble() * (maxValue - minValue) + minValue;
+            FillFields(minValue, maxValue);
         }
 
         // method to fill matrix with random values
@@ -41,17 +52,14 @@
 
             Console.WriteLine("Enter maximal value: ");
             double max = Convert.ToDouble(Console.ReadLine());
-
-            Random rand = new Random();
-            for (int i = 0; i < rows; i++)
-                for (int j = 0; j < columns; j++)
-                    matrix[i, j] = rand.NextDouble() * (max - min) + min;
+            
+            FillFields(min, max);
         }
 
         // method to resize matrix
         public void ChangeSize()
         {
-            // init new size valuef
+            // init new size value
             Console.WriteLine("Enter new value for rows: ");
             int newRows = Convert.ToInt32(Console.ReadLine());
 
@@ -108,7 +116,7 @@
         public void ShowPartialy(int startRow, int startColumn, int endRow, int endColumn)
         {
             // validation
-            if (startRow < 0 || startColumn < 0 || endColumn > columns || startRow > endRow || startColumn > endColumn)
+            if (startRow < 0 || startColumn < 0 || endColumn > columns || endRow >= rows || startColumn > endColumn || startRow > endRow)
             {
                 throw new ArgumentException("Invalid range params");
             }

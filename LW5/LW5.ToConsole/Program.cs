@@ -58,7 +58,6 @@ namespace LW5.ToConsole
 
             // adding 
             Console.WriteLine("Please, enter count of values: ");
-            int n = Console.ReadLine().;
         }
 
         static void Main()
