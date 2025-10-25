@@ -19,6 +19,17 @@
             }
         }
 
+        public void Fill()
+        {
+            Console.WriteLine("Enter minimal value: ");
+            double min = Convert.ToDouble(Console.ReadLine());
+
+            Console.WriteLine("Enter maximal value: ");
+            double max = Convert.ToDouble(Console.ReadLine());
+
+            FillFields(min, max);
+        }
+
         // constructor
         public MyMatrix(int m, int n, double minV = 0, double maxV = 100)
         {
@@ -42,18 +53,6 @@
 
             // fill matrix with random values
             FillFields(minValue, maxValue);
-        }
-
-        // method to fill matrix with random values
-        public void Fill()
-        {
-            Console.WriteLine("Enter minimal value: ");
-            double min = Convert.ToDouble(Console.ReadLine());
-
-            Console.WriteLine("Enter maximal value: ");
-            double max = Convert.ToDouble(Console.ReadLine());
-            
-            FillFields(min, max);
         }
 
         // method to resize matrix
@@ -102,6 +101,42 @@
                         }
 
                         newMatrix[i, j] = random.NextDouble() * (max - min) + min;
+                    }
+                }
+            }
+
+            // reinit
+            matrix = newMatrix;
+            rows = newRows;
+            columns = newColumns;
+        }
+
+        // method for test
+        public void ChangeSize(int newRows, int newColumns, double minValue, double maxValue)
+        {
+            // validation
+            if (newRows <= 0 || newColumns <= 0)
+                throw new ArgumentException("New values must be greater than 0");
+
+            double[,] newMatrix = new double[newRows, newColumns];
+            Random random = new Random();
+
+            // copy existing values
+            int rowsToCopy = Math.Min(rows, newRows);
+            int columnsToCopy = Math.Min(columns, newColumns);
+
+            for (int i = 0; i < rowsToCopy; i++)
+                for (int j = 0; j < columnsToCopy; j++)
+                    newMatrix[i, j] = matrix[i, j];
+
+            // fill new cells if new size is bigger
+            for (int i = 0; i < newRows; i++)
+            {
+                for (int j = 0; j < newColumns; j++)
+                {
+                    if (i >= rows || j >= columns)
+                    {
+                        newMatrix[i, j] = random.NextDouble() * (maxValue - minValue) + minValue;
                     }
                 }
             }
