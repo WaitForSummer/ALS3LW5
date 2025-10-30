@@ -30,7 +30,13 @@
             FillFields(min, max);
         }
 
+        public void Fill(double minV, double maxV)
+        {
+            FillFields(minV, maxV);
+        }
+
         // constructor
+        // constructor fot tests
         public MyMatrix(int m, int n, double minV = 0, double maxV = 100)
         {
             // validate input
@@ -45,14 +51,8 @@
             matrix = new double[rows, columns];
             random = new Random();
 
-            Console.WriteLine("Enter minimal value: ");
-            double minValue = Convert.ToDouble(Console.ReadLine());
-
-            Console.WriteLine("Enter maximal value: ");
-            double maxValue = Convert.ToDouble(Console.ReadLine());
-
             // fill matrix with random values
-            FillFields(minValue, maxValue);
+            FillFields(minV, maxV);
         }
 
         // method to resize matrix
@@ -151,7 +151,7 @@
         public void ShowPartialy(int startRow, int startColumn, int endRow, int endColumn)
         {
             // validation
-            if (startRow < 0 || startColumn < 0 || endColumn > columns || endRow >= rows || startColumn > endColumn || startRow > endRow)
+            if (startRow < 0 || startColumn < 0 || endColumn >= columns || endRow >= rows || startColumn > endColumn || startRow > endRow)
             {
                 throw new ArgumentException("Invalid range params");
             }

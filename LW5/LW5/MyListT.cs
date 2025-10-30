@@ -1,35 +1,38 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LW5
 {
     public class MyList<T> : IEnumerable<T>
     {
+        // init fields
         private T[] items;
         private int count;
         private int capacity;
 
-        // constructor
-        public MyList() 
+        // properties and methods
+        public int Count
         {
-            capacity = 4;
-            items = new T[capacity];
-            count = 0;
+            get
+            {
+                return count;
+            }
         }
 
-        // constructor w capacity
-        public MyList(int capacity)
+        public int Capacity
         {
-            this.capacity = capacity;
-            items = new T[capacity];
-            count = 0;
+            get
+            {
+                return capacity;
+            }
         }
 
         // adding method
-        public void Add(T item) 
+        public void Add(T item)
         {
-            if (count == capacity) 
+            if (count == capacity)
             {
                 T[] newItems = new T[capacity * 2];
                 Array.Copy(items, newItems, count);
@@ -40,10 +43,50 @@ namespace LW5
             count++;
         }
 
-        // user indexator
-        public T this[int index] 
+        // collection init
+        public void AddRange(IEnumerable<T> collection)
         {
-            get 
+            if (collection == null)
+                throw new ArgumentNullException("Collection is null");
+
+            foreach (var item in collection)
+                Add(item);
+        }
+
+        // constructor
+        public MyList()
+        {
+            capacity = 4;
+            items = new T[capacity];
+            count = 0;
+        }
+
+        // constructor w capacity
+        public MyList(int capacity)
+        {
+            if (capacity <= 0)
+                throw new ArgumentException("Capacity must be > 0");
+
+            this.capacity = capacity;
+            items = new T[capacity];
+            count = 0;
+        }
+
+        // constructor w collection
+        public MyList(IEnumerable<T> collection)
+        {
+            if (collection == null)
+                throw new ArgumentNullException("Collection is null");
+
+            items = collection.ToArray();
+            count = items.Length;
+            capacity = Math.Max(count, 4);
+        }
+
+        // user indexator
+        public T this[int index]
+        {
+            get
             {
                 if (index < 0 || index >= count)
                     throw new IndexOutOfRangeException("Index out of range");
@@ -55,16 +98,6 @@ namespace LW5
                     throw new IndexOutOfRangeException("Index out of range");
                 items[index] = value;
             }
-        }
-
-        // property
-        public int Count => count;
-
-        // collection init
-        public void AddRange(IEnumerable<T> collection)
-        {
-            foreach (var item in collection)
-                Add(item);
         }
 
         // realization of IEnumarable
@@ -82,15 +115,17 @@ namespace LW5
         // additing methods for comfotability
         public void Clear()
         {
-            items = new T[4];
+            if (count > 0)
+            {
+                Array.Clear(items, 0, count);
+            }
             count = 0;
-            capacity = 4;
         }
 
         // "are item in items"?
-        public bool Contains(T item) 
+        public bool Contains(T item)
         {
-            for (int i = 0; i<count; i++)
+            for (int i = 0; i < count; i++)
             {
                 // look if item in items
                 if (EqualityComparer<T>.Default.Equals(items[i], item))
@@ -100,10 +135,10 @@ namespace LW5
         }
 
         // return index
-        public int IndexOf(T item) 
+        public int IndexOf(T item)
         {
-            for (int i = 0; i<count; i++)
-                if (EqualityComparer<T>.Default.Equals(items[0], item))
+            for (int i = 0; i < count; i++)
+                if (EqualityComparer<T>.Default.Equals(items[i], item))
                     return i;
             return -1;
         }
@@ -114,12 +149,25 @@ namespace LW5
             if (index < 0 || index >= count)
                 throw new IndexOutOfRangeException("Index is out of range");
 
-            for (int i = index;  i < count; i++)
+            for (int i = index; i < count - 1; i++)
             {
-                items[i] = items[i+1];
+                items[i] = items[i + 1];
             }
             count--;
             items[count] = default(T);
+        }
+
+        // remove by value
+        public bool Remove(T item)
+        {
+            int index = IndexOf(item);
+            if (index >= 0)
+            {
+
+                RemoveAt(index);
+                return true;
+            }
+            return false;
         }
     }
 }

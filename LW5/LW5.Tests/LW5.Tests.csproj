@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LW5.ToConsole\LW5.ToConsole.csproj" />
     <ProjectReference Include="..\LW5\LW5.csproj" />
   </ItemGroup>
 
