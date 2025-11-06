@@ -134,7 +134,12 @@ namespace LW5.Tests
                     matrix.ShowPartialy(0, 1, 2, 3);
 
                     string output = writer.ToString();
+
                     Assert.IsFalse(string.IsNullOrEmpty(output));
+                    Assert.IsTrue(output.Length > 0);
+
+                    bool containsNumbers = System.Text.RegularExpressions.Regex.IsMatch(output, @"\d+");
+                    Assert.IsTrue(containsNumbers, "Output should contain numbers");
                 }
             }
             finally
